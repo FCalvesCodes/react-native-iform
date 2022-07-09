@@ -1,3 +1,3 @@
-import { useFormControl } from './useIForm';
+import { useFormControl } from './useFormControl';
 
 export { useFormControl };
