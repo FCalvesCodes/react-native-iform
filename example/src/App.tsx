@@ -1,6 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View } from 'react-native';
-import { Form, Field, Watch, useIForm } from 'react-native-iform';
+import { Form, Field, Watch } from 'react-native-iform';
 import Input from './components/Input';
 
 const App = () => {

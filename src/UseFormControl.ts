@@ -1,15 +1,15 @@
 import { UseFormReturn } from 'react-hook-form';
 
-type IUseFormControl = {
+export interface IUseFormControl {
   form?: UseFormReturn;
   onSubmit: (
     e?: React.BaseSyntheticEvent<object, any, any> | undefined
   ) => void;
   _setForm: (form: UseFormReturn) => void;
   _setOnSubmit: (onSubmit: () => void) => void;
-};
+}
 
-class UseFormControl implements IUseFormControl {
+export class UseFormControl implements IUseFormControl {
   public form?: UseFormReturn;
   private _onSubmit?: () => void;
 
@@ -31,5 +31,3 @@ class UseFormControl implements IUseFormControl {
     }
   };
 }
-
-export { UseFormControl, IUseFormControl };

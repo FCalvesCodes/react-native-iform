@@ -21,12 +21,12 @@ type IFormProps = {
   reValidateMode?: Exclude<Mode, 'onTouched' | 'all'>;
   criteriaMode?: CriteriaMode;
   yupSchema?: AnyObjectSchema;
-  form?: IUseFormControl;
+  control?: IUseFormControl;
 };
 
 const Form: React.FC<IFormProps> = ({
   children,
-  form,
+  control,
   yupSchema,
   initialValues = {},
   mode,
@@ -51,10 +51,12 @@ const Form: React.FC<IFormProps> = ({
   const onSubmitForm = methods.handleSubmit(handleOnSubmit);
 
   useEffect(() => {
-    if (form) {
-      (form as UseFormControl)?._setForm(methods);
-      (form as UseFormControl)?._setOnSubmit(onSubmitForm);
+    if (control) {
+      (control as UseFormControl)?._setForm(methods);
+      (control as UseFormControl)?._setOnSubmit(onSubmitForm);
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (typeof children === 'function') {
