@@ -1,31 +1,17 @@
-import * as React from 'react';
+import React from 'react';
+import { Text, TextInput, View } from 'react-native';
+import { Form, Field, Watch, useIForm } from 'react-native-iform';
+import Input from './components/Input';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-iform';
-
-export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
-
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <Form>
+      <Watch />
+      <Field name="name" rules={{ min: 2 }}>
+        <Input />
+      </Field>
+    </Form>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});
+export default App;

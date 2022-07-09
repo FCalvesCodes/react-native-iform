@@ -1,6 +1,6 @@
 {
   "name": "react-native-iform",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -35,7 +35,10 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/FelipeAlmeid4/react-native-iform",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FelipeAlmeid4/react-native-iform.git"
+  },
   "author": "Felipe Calves <felipe.a.c090396@gmail.com> (https://github.com/FelipeAlmeid4)",
   "license": "MIT",
   "bugs": {
@@ -147,5 +150,15 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "@hookform/resolvers": "2.9.5",
+    "lodash": "4.17.21",
+    "react-hook-form": "7.33.1",
+    "yup": "0.32.11"
+  },
+  "directories": {
+    "example": "example",
+    "lib": "lib"
   }
 }
