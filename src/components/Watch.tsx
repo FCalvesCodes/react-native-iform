@@ -1,59 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { useFormContext } from 'react-hook-form';
+import { useFormState, useWatch } from 'react-hook-form';
 
 type IWatchProps = {
   style?: object;
+  showError?: boolean;
 };
 
-const Watch: React.FC<IWatchProps> = ({ style }) => {
-  const { watch, formState } = useFormContext();
-  const {
-    isSubmitted,
-    isDirty,
-    isSubmitting,
-    isSubmitSuccessful,
-    isValid,
-    submitCount,
-    isValidating,
-  } = formState;
+const Watch: React.FC<IWatchProps> = ({ style, showError = false }) => {
+  const { isValid, errors } = useFormState();
+  const values = useWatch();
 
-  const [changedValues, setChangedValues] = useState<object>(watch());
-
-  useEffect(() => {
-    const subscribe = watch((values: object) => {
-      setChangedValues(values);
-    });
-
-    return () => {
-      if (subscribe) {
-        subscribe?.unsubscribe();
-      }
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const styleContainer = StyleSheet.flatten([!isValid && styles.borderError]);
 
   return (
-    <View style={[styles.container, style]}>
-      <Text style={styles.text}>{JSON.stringify(changedValues, null, 2)}</Text>
-      {false ? (
-        <View>
-          <Text style={styles.small}>{`isSubmitted:${isSubmitted}`}</Text>
-          <Text
-            style={styles.small}
-          >{`isisSubmittingirty:${isSubmitting}`}</Text>
-          <Text
-            style={styles.small}
-          >{`isisSubmittingirty:${isSubmitting}`}</Text>
-          <Text
-            style={styles.small}
-          >{`isSubmitSuccessful:${isSubmitSuccessful}`}</Text>
-          <Text style={styles.small}>{`isDirty:${isDirty}`}</Text>
-          <Text style={styles.small}>{`isValid:${isValid}`}</Text>
-          <Text style={styles.small}>{`submitCount:${submitCount}`}</Text>
-          <Text style={styles.small}>{`isValidating:${isValidating}`}</Text>
-        </View>
+    <View style={[styles.container, styleContainer, style]}>
+      <Text style={styles.text}>{JSON.stringify(values, null, 2)}</Text>
+      {showError && !isValid ? (
+        <Text style={styles.text}>{JSON.stringify(errors, null, 2)}</Text>
       ) : null}
     </View>
   );
@@ -66,6 +30,10 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderRadius: 5,
     margin: 10,
+  },
+  borderError: {
+    borderWidth: 2,
+    borderColor: 'red',
   },
   text: {
     color: '#FFF',

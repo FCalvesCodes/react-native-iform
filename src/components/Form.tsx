@@ -4,15 +4,14 @@ import { AnyObjectSchema } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { UseFormControl, IUseFormControl } from '../UseFormControl';
 
+type IFormReturnProps = {
+  onSubmit: () => void;
+};
+
 type IFormProps = {
-  children?:
-    | {
-        onSubmit: (
-          e?: React.BaseSyntheticEvent<object, any, any> | undefined
-        ) => Promise<void>;
-      }
-    | React.ReactNode
-    | React.ReactElement;
+  children?: (
+    methods: IFormReturnProps
+  ) => any | React.ReactNode | React.ReactElement;
   onSubmit?: (submittingValues: object) => void;
   onBeforeSubmit?: (submittingValues: object) => object;
   onBeforeBinding?: (submittingValues: object) => object;
@@ -29,9 +28,9 @@ const Form: React.FC<IFormProps> = ({
   control,
   yupSchema,
   initialValues = {},
-  mode,
-  criteriaMode,
-  reValidateMode,
+  mode = 'onChange',
+  criteriaMode = 'firstError',
+  reValidateMode = 'onChange',
   onBeforeBinding = (submittingValues: object) => submittingValues,
   onBeforeSubmit = (submittingValues: object) => submittingValues,
   onSubmit = (submittingValues: object) => submittingValues,

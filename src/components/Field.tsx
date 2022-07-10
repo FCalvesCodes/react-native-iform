@@ -8,7 +8,7 @@ import {
 
 type IFieldProps = {
   children:
-    | ((methods: UseControllerReturn) => React.ReactNode | React.ReactElement)
+    | ((methods: UseControllerReturn) => any)
     | React.ReactNode
     | React.ReactElement;
   name: string;
@@ -27,13 +27,17 @@ const Field: React.FC<IFieldProps> = ({
   shouldUnregister = true,
   defaultValue,
 }) => {
+  if (!name) {
+    throw Error('Name is required');
+  }
+
   const { control } = useFormContext();
   const controller = useController({
     control: control,
     name,
     rules,
-    shouldUnregister,
     defaultValue,
+    shouldUnregister,
   });
 
   if (typeof children === 'function') {
