@@ -8,7 +8,7 @@ import {
 
 type IFieldProps = {
   children:
-    | ((methods: UseControllerReturn) => any)
+    | ((props: UseControllerReturn) => any)
     | React.ReactNode
     | React.ReactElement;
   name: string;

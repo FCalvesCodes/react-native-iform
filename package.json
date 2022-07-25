@@ -1,6 +1,6 @@
 {
   "name": "react-native-iform",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -157,6 +157,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "2.9.5",
+    "create-react-class": "15.7.0",
     "lodash": "4.17.21",
     "react-hook-form": "7.33.1",
     "yup": "0.32.11"

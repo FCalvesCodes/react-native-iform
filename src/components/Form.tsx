@@ -1,17 +1,23 @@
-import React, { useEffect } from 'react';
-import { useForm, FormProvider, CriteriaMode, Mode } from 'react-hook-form';
+import React from 'react';
+import {
+  useForm,
+  FormProvider,
+  CriteriaMode,
+  Mode,
+  UseFormReturn,
+} from 'react-hook-form';
 import { AnyObjectSchema } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { UseFormControl, IUseFormControl } from '../UseFormControl';
 
-type IFormReturnProps = {
-  onSubmit: () => void;
+type IFormHandle = {
+  onSubmit: (
+    e?: React.BaseSyntheticEvent<object, any, any> | undefined
+  ) => Promise<void>;
+  form: UseFormReturn<object, object>;
 };
 
 type IFormProps = {
-  children?: (
-    methods: IFormReturnProps
-  ) => any | React.ReactNode | React.ReactElement;
+  children?: (props: IFormHandle) => any;
   onSubmit?: (submittingValues: object) => void;
   onBeforeSubmit?: (submittingValues: object) => object;
   onBeforeBinding?: (submittingValues: object) => object;
@@ -20,21 +26,22 @@ type IFormProps = {
   reValidateMode?: Exclude<Mode, 'onTouched' | 'all'>;
   criteriaMode?: CriteriaMode;
   yupSchema?: AnyObjectSchema;
-  control?: IUseFormControl;
 };
 
-const Form: React.FC<IFormProps> = ({
-  children,
-  control,
-  yupSchema,
-  initialValues = {},
-  mode = 'onChange',
-  criteriaMode = 'firstError',
-  reValidateMode = 'onChange',
-  onBeforeBinding = (submittingValues: object) => submittingValues,
-  onBeforeSubmit = (submittingValues: object) => submittingValues,
-  onSubmit = (submittingValues: object) => submittingValues,
-}) => {
+const Form: React.ForwardRefRenderFunction<IFormHandle, IFormProps> = (
+  {
+    children,
+    yupSchema,
+    initialValues = {},
+    mode = 'onChange',
+    criteriaMode = 'firstError',
+    reValidateMode = 'onChange',
+    onBeforeBinding = (submittingValues: object) => submittingValues,
+    onBeforeSubmit = (submittingValues: object) => submittingValues,
+    onSubmit = (submittingValues: object) => submittingValues,
+  },
+  ref
+) => {
   const methods = useForm({
     defaultValues: onBeforeBinding(initialValues),
     mode,
@@ -49,20 +56,17 @@ const Form: React.FC<IFormProps> = ({
 
   const onSubmitForm = methods.handleSubmit(handleOnSubmit);
 
-  useEffect(() => {
-    if (control) {
-      (control as UseFormControl)?._setForm(methods);
-      (control as UseFormControl)?._setOnSubmit(onSubmitForm);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  React.useImperativeHandle(ref, () => ({
+    form: methods,
+    onSubmit: onSubmitForm,
+  }));
 
   if (typeof children === 'function') {
     return (
       <FormProvider {...methods}>
         {children({
           onSubmit: onSubmitForm,
+          form: methods,
         })}
       </FormProvider>
     );
@@ -71,4 +75,4 @@ const Form: React.FC<IFormProps> = ({
   return <FormProvider {...methods}>{children}</FormProvider>;
 };
 
-export default Form;
+export default React.forwardRef(Form);
