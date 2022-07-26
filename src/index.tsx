@@ -6,6 +6,8 @@ import {
   UseControllerReturn,
   useController,
   useFormContext,
+  useFormState,
+  useFieldArray,
 } from 'react-hook-form';
 
 export {
@@ -14,5 +16,7 @@ export {
   Watch,
   useController,
   useFormContext,
+  useFormState,
+  useFieldArray,
   UseControllerReturn,
 };
