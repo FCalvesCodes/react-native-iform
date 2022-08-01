@@ -5,10 +5,17 @@ import {
   UseControllerReturn,
   useFormContext,
 } from 'react-hook-form';
+import useIForm from '../hooks/useIForm';
+import * as yupHelper from '../utils/yupHelper';
+
+type IFieldReturn = UseControllerReturn & {
+  isRequired: boolean;
+  label: string;
+};
 
 type IFieldProps = {
   children:
-    | ((props: UseControllerReturn) => any)
+    | ((props: IFieldReturn) => any)
     | React.ReactNode
     | React.ReactElement;
   name: string;
@@ -27,11 +34,15 @@ const Field: React.FC<IFieldProps> = ({
   shouldUnregister = true,
   defaultValue,
 }) => {
-  if (!name) {
-    throw Error('Name is required');
-  }
-
+  const { yupSchema } = useIForm();
   const { control } = useFormContext();
+
+  const isRequired = yupSchema
+    ? yupHelper.isRequired(yupSchema, name)
+    : rules?.required === true || rules?.required === 'true';
+
+  const label = yupHelper.getLabel(yupSchema, name);
+
   const controller = useController({
     control: control,
     name,
@@ -41,11 +52,13 @@ const Field: React.FC<IFieldProps> = ({
   });
 
   if (typeof children === 'function') {
-    return children(controller);
+    return children({ ...controller, isRequired, label });
   }
 
   if (React.isValidElement(children)) {
-    return React.cloneElement(children, { controller });
+    return React.cloneElement(children, {
+      controller: { ...controller, isRequired, label },
+    });
   }
 
   return <>{children}</>;

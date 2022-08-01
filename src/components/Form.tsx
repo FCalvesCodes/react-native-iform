@@ -8,6 +8,7 @@ import {
 } from 'react-hook-form';
 import { AnyObjectSchema } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { IFormProvider } from '../contexts/IForm';
 
 type IFormHandle = {
   onSubmit: (
@@ -33,7 +34,7 @@ const Form: React.ForwardRefRenderFunction<IFormHandle, IFormProps> = (
     children,
     yupSchema,
     initialValues = {},
-    mode = 'onChange',
+    mode = 'onSubmit',
     criteriaMode = 'firstError',
     reValidateMode = 'onChange',
     onBeforeBinding = (submittingValues: object) => submittingValues,
@@ -61,18 +62,18 @@ const Form: React.ForwardRefRenderFunction<IFormHandle, IFormProps> = (
     onSubmit: onSubmitForm,
   }));
 
-  if (typeof children === 'function') {
-    return (
+  return (
+    <IFormProvider yupSchema={yupSchema}>
       <FormProvider {...methods}>
-        {children({
-          onSubmit: onSubmitForm,
-          form: methods,
-        })}
+        {typeof children === 'function'
+          ? children({
+              onSubmit: onSubmitForm,
+              form: methods,
+            })
+          : children}
       </FormProvider>
-    );
-  }
-
-  return <FormProvider {...methods}>{children}</FormProvider>;
+    </IFormProvider>
+  );
 };
 
 export default React.forwardRef(Form);
