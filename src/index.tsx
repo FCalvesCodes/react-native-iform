@@ -1,6 +1,7 @@
 import Form from './components/Form';
 import Field from './components/Field';
 import Watch from './components/Watch';
+import useIForm from './hooks/useIForm';
 
 import {
   UseControllerReturn,
@@ -14,6 +15,7 @@ export {
   Form,
   Field,
   Watch,
+  useIForm,
   useController,
   useFormContext,
   useFormState,

@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 3,
     borderRadius: 5,
-    margin: 10,
   },
   borderError: {
     borderWidth: 2,

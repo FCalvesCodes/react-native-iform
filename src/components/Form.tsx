@@ -63,7 +63,7 @@ const Form: React.ForwardRefRenderFunction<IFormHandle, IFormProps> = (
   }));
 
   return (
-    <IFormProvider yupSchema={yupSchema}>
+    <IFormProvider yupSchema={yupSchema} form={methods} onSubmit={onSubmitForm}>
       <FormProvider {...methods}>
         {typeof children === 'function'
           ? children({
